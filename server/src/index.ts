@@ -25,8 +25,15 @@ const io = new SocketIOServer(server, {
 })
 
 // Security
-app.use(helmet())
-app.use(cors({ origin: process.env.CLIENT_URL || '*', credentials: true }))
+app.use(helmet({ crossOriginResourcePolicy: false }))
+app.use(cors({
+  origin: function (origin, callback) {
+    callback(null, origin || true)
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+}))
 
 // Rate limiting
 const limiter = rateLimit({
