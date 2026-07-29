@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd client && npx vite build",
+  "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
-  "installCommand": "npm install && cd client && npm install",
+  "installCommand": "npm install",
   "functions": {
     "api/index.ts": {
       "memory": 512,
@@ -10,6 +10,7 @@
   },
   "routes": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" },
+    { "handle": "filesystem" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
