@@ -41,7 +41,8 @@ export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextF
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string }
-      req.user = await User.findById(decoded.id)
+      const user = await User.findById(decoded.id)
+      if (user) req.user = user
     } catch {
       // Silently fail for optional auth
     }
@@ -52,5 +53,5 @@ export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextF
 export const generateToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, {
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  })
+  } as jwt.SignOptions)
 }
